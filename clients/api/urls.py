@@ -10,5 +10,8 @@ urlpatterns = [
     path('clients/<pk>',
          views.ClientDetailView.as_view(),
          name='client_detail'),
+    path('register/',
+         views.CreateUserView.as_view(),
+         name='user_register'),
 
 ]
