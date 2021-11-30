@@ -10,13 +10,25 @@ class ClientSerializer(serializers.ModelSerializer):
     last_name = serializers.ReadOnlyField(source='user.last_name')
     class Meta:
         model = Client
-        fields = ['user_id','user','email','first_name','last_name','photo','sex']
+        fields = ['user_id',
+                  'user',
+                  'email',
+                  'first_name',
+                  'last_name',
+                  'photo',
+                  'sex']
 
 class UserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField()
     class Meta:
         model = User
-        fields = ['id', 'username', 'password','password2', 'email', 'first_name', 'last_name']
+        fields = ['id',
+                  'username',
+                  'password',
+                  'password2',
+                  'email',
+                  'first_name', 
+                  'last_name']
 
 
     def save(self, *args, **kwargs):
