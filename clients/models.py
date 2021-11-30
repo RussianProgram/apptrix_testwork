@@ -7,14 +7,17 @@ class Client(models.Model):
                                 related_name='client',
                                 on_delete=models.CASCADE,
                                 primary_key=True)
-    photo = models.ImageField(upload_to='media/%Y/%m/%d',blank=True)
+    photo = models.ImageField(upload_to='media/%Y/%m/%d',
+                              blank=True)
 
     SEX_TYPES = (
         ('M','Male'),
         ('F','Female'),
     )
 
-    sex = models.CharField(max_length=1, choices=SEX_TYPES,blank=True)
+    sex = models.CharField(max_length=1, 
+                           choices=SEX_TYPES,
+                           blank=True)
 
     def __str__(self):
         return self.user.username
