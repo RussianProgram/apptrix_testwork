@@ -21,3 +21,15 @@ class Client(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class Liked(models.Model):
+    like_from = models.ForeignKey('auth.User',
+                                  related_name='like_from',
+                                  on_delete=models.CASCADE)
+    like_to = models.ForeignKey('auth.User',
+                                related_name='like_to',
+                                on_delete=models.CASCADE)
+    def __str__(self):
+        return f'{self.like_from} like {self.like_to}'
+

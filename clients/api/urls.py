@@ -13,5 +13,8 @@ urlpatterns = [
     path('register/',
          views.CreateUserView.as_view(),
          name='user_register'),
+    path('clients/<pk>/match',
+         views.ClientMatchView.as_view(),
+         name='client_match'),
 
 ]
