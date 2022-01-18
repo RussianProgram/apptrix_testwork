@@ -1,0 +1,16 @@
+.idea/dataSources.xml
+README.md
+clients/__pycache__/
+clients/api/__pycache__/
+clients/migrations/0001_initial.py
+clients/migrations/0002_auto_20220117_1310.py
+clients/migrations/0003_auto_20220117_1341.py
+clients/migrations/0004_auto_20220117_1344.py
+clients/migrations/0005_auto_20220117_1347.py
+clients/migrations/0006_auto_20220117_1350.py
+clients/migrations/__pycache__/
+db.sqlite3
+projectDates/__pycache__/celery.cpython-39.pyc
+projectDates/__pycache__/routers.cpython-39.pyc
+projectDates/__pycache__/urls.cpython-39.pyc
+projectDates/__pycache__/wsgi.cpython-39.pyc
