@@ -1,76 +1,111 @@
-from rest_framework.generics import ListAPIView,CreateAPIView,RetrieveAPIView,GenericAPIView
-from rest_framework.permissions import AllowAny,IsAuthenticated
-from rest_framework import status
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import (AllowAny,IsAuthenticated,
+                                        IsAdminUser)
 from rest_framework.response import Response
+from rest_framework.exceptions import MethodNotAllowed
+
+from django.contrib.auth.models import User
+from django_filters.rest_framework import DjangoFilterBackend
 
 from ..models import Client,Liked
 from ..tasks import match_created
+from ..filters import DistanceFilter,BaseClientFilter
 
-from .serializers import ClientSerializer,UserSerializer
-
-from django.contrib.auth.models import User
-from django_filters import rest_framework as filters
-
+from .serializers import (ClientSerializer,UserSerializer,
+                          ClientUpdateSerialiser)
 
 
-class ClientsListFilter(filters.FilterSet):
-    first_name = filters.CharFilter(field_name='user__first_name')
-    last_name = filters.CharFilter(field_name='user__last_name')
-    class Meta:
-        model = Client
-        fields = ['sex']
-
-class ClientListView(ListAPIView):
+"""
+Основной ViewSet для проекта
+"""
+class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
-    filterset_class = ClientsListFilter
+    filter_backends = [DjangoFilterBackend,DistanceFilter]
+    filterset_class = BaseClientFilter
 
-class ClientDetailView(RetrieveAPIView):
-    queryset = Client.objects.all()
-    serializer_class = ClientSerializer
+    permission_classes_by_action = {
+        'create': [AllowAny],
+        'match': [IsAuthenticated],
+        'update': [IsAuthenticated],
+        'destroy': [IsAdminUser]
+        }
 
-class CreateUserView(CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [AllowAny]
+    def create(self, request, *args, **kwargs):
+        client_serialiser = self.get_serializer(data=request.data)
+        client_serialiser.is_valid(raise_exception=True)
+        data = client_serialiser.validated_data
+        client_serialiser.save(**data)
 
-    def post(self,request,*args,**kwargs):
-        serializer = UserSerializer(data=request.data)
-        data = {}
-        if serializer.is_valid():
-            serializer.save()
-            data['response'] = True
-            return Response(data, status=status.HTTP_200_OK)
-        else:
-            data = serializer.errors
-            return Response(data)
+        return Response(status=status.HTTP_201_CREATED)
 
-class ClientMatchView(GenericAPIView):
-    permission_classes = [AllowAny]
+    def partial_update(self, request, *args, **kwargs):
+        raise MethodNotAllowed("POST",detail="Use PUT")
 
-    def get(self, request, *args, **kwargs):
-        user_id = kwargs.get('pk')
-        user = User.objects.get(id=user_id)
+    """
+    Логика для создания связи между участниками,
+    при совместном интересе на почты обоих с помощью Celery
+    отправляются уведомительные письма
+    """
+    @action(detail=True, methods=['get'])
+    def match(self,request,pk=None):
+        user = User.objects.get(id=pk)
 
-        liked_from = Liked.objects.filter(like_from=user, like_to=request.user)
-        liked_to = Liked.objects.filter(like_from=request.user, like_to=user)
+        liked_from = Liked.objects.filter(
+            like_from=user,
+            like_to=request.user
+        )
+        liked_to = Liked.objects.filter(
+            like_from=request.user,
+            like_to=user
+        )
 
         if user != request.user:
             if liked_from:
                 if liked_to:
-                    return Response({'Status': 'your already inlove'})
-                Liked.objects.create(like_from=request.user, like_to=user)
-                match_created.delay(request.user.username,
-                                    request.user.email,
-                                    user.email)
-                match_created.delay(user.username,
-                                    user.email,
-                                    request.user.email)
-                return Response({'Good':f'Now check your mail'})
+                    return Response({'Status': 'your already inlove in this person'})
+
+                Liked.objects.create(
+                    like_from=request.user,
+                    like_to=user
+                )
+                match_created.delay(
+                    request.user.username,
+                    request.user.email,
+                    user.email
+                )
+                match_created.delay(
+                    user.username,
+                    user.email,
+                    request.user.email
+                )
+                return Response({'Good': f'Now check your mail'})
 
             else:
-                Liked.objects.create(like_from=request.user,like_to=user)
-                return Response({'Half good':'its his time'})
+                if liked_to:
+                    return Response({'Status': 'your already like this person'})
+
+                Liked.objects.create(
+                    like_from=request.user,
+                    like_to=user
+                    )
+                return Response({'Half good': 'Now wait for reply'})
         else:
-            return Response({'Static':'You cant be inlove in yourself'})
+            return Response({'Status': 'You cant be inlove in yourself'})
+
+    """Получить разрешение исходя из определенного вида запроса"""
+    def get_permissions(self):
+        try:
+            return [permission() for permission in self.permission_classes_by_action[self.action]]
+        except KeyError:
+            return [permission() for permission in self.permission_classes]
+
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return UserSerializer
+        if self.action == 'update':
+            return ClientUpdateSerialiser
+        return ClientSerializer
+

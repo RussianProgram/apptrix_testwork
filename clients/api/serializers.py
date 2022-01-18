@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from ..models import Client
 from django.contrib.auth.models import User
 
@@ -10,14 +11,46 @@ class ClientSerializer(serializers.ModelSerializer):
     last_name = serializers.ReadOnlyField(source='user.last_name')
     class Meta:
         model = Client
-        fields = ['user_id','user','email','first_name','last_name','photo','sex']
+
+        fields = [
+            'user_id',
+            'user','email',
+            'first_name',
+            'last_name',
+            'photo',
+            'sex',
+            'latitude',
+            'longitude'
+            ]
+
+        read_only_fields = [
+            'photo',
+            'sex',
+        ]
+
+class ClientUpdateSerialiser(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+        fields = [
+            'photo',
+            'sex',
+            'longitude',
+            'latitude'
+        ]
 
 class UserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField()
     class Meta:
         model = User
-        fields = ['id', 'username', 'password','password2', 'email', 'first_name', 'last_name']
-
+        fields = [
+            'id',
+            'username',
+            'password',
+            'password2',
+            'email',
+            'first_name',
+            'last_name'
+        ]
 
     def save(self, *args, **kwargs):
         user = User(

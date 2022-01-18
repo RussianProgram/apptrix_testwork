@@ -1,7 +1,9 @@
 from celery import shared_task
 from django.core.mail import send_mail
 
-
+"""
+Асинхронная задача для отправки почты участнику
+"""
 @shared_task
 def match_created(match_name,match_email,mail_to):
     subject = f'You has been liked'
