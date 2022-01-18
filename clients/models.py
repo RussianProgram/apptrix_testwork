@@ -13,6 +13,7 @@ class Client(models.Model):
         blank=True
     )
 
+
     SEX_TYPES = (
         ('M','Male'),
         ('F','Female'),
@@ -31,6 +32,7 @@ class Client(models.Model):
         verbose_name='Широта',
         blank=True
     )
+
 
     def __str__(self):
         return f"{self.user.username}"
@@ -51,3 +53,4 @@ class Liked(models.Model):
 
     def __str__(self):
         return f'{self.like_from} like {self.like_to}'
+

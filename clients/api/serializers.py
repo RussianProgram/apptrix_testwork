@@ -11,7 +11,6 @@ class ClientSerializer(serializers.ModelSerializer):
     last_name = serializers.ReadOnlyField(source='user.last_name')
     class Meta:
         model = Client
-
         fields = [
             'user_id',
             'user','email',
@@ -51,6 +50,7 @@ class UserSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name'
         ]
+
 
     def save(self, *args, **kwargs):
         user = User(
