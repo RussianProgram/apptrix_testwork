@@ -17,6 +17,20 @@ https://en.wikipedia.org/wiki/Great-circle_distance](https://github.com/RussianP
 
 7) [Задеплоить проект на любом удобном для вас хостинге, сервисах PaaS (Heroku) и т.п. Должна быть возможность просмотреть реализацию всех задач. Если есть какие-то особенности по тестированию, написать в Readme. Там же оставить ссылку/ссылки на АПИ проекта]()
 
+# HOW TO:
+## Как запустить
+### Клонируем
+```
+git clone https://github.com/RussianProgram/apptrix_testwork.git
+```
+### Первоначальная установка 
+```
+cd apptix_testwork
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser
+```
+Создаём супер-юзера с именем admin и паролем admin.
 
 # API DOCUMENTATION:
 ### CLIENTS LIST (GET)
