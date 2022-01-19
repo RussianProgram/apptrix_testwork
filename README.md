@@ -45,11 +45,13 @@ curl --data "username=somename&password=somepass&password2=somepass&email=email&
 ```shell
 curl --location --request GET http://localhost:8000/api/clients/{client_id}/
 ```
-### CLIENT UPDATE (PUT)
+### CLIENT UPDATE (PUT) 
+#### Authentification only!
 ```shell
 curl --data "{"sex":"F""}" http://localhost:8000/api/clients/{client_id}/
 ```
 ### CLIENT MATCH (GET)
+#### Authentification only!
 ```shell
 curl --location --request GET http://localhost:8000/api/clients/{client_id}/match/
 ```
