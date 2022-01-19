@@ -16,7 +16,7 @@
 https://en.wikipedia.org/wiki/Great-circle_distance](https://github.com/RussianProgram/apptrix_testwork/commit/a1606c985f24df564d88226d48d95c6efb9db453)
 
 7) [Задеплоить проект на любом удобном для вас хостинге, сервисах PaaS (Heroku) и т.п. Должна быть возможность просмотреть реализацию всех задач. Если есть какие-то особенности по тестированию, написать в Readme. Там же оставить ссылку/ссылки на АПИ проекта](http://russianprogram.pythonanywhere.com/api/clients/)
-# http://russianprogram.pythonanywhere.com/api/clients/
+## http://russianprogram.pythonanywhere.com/api/clients/
 
 # HOW TO:
 ## Как запустить на Локалке
