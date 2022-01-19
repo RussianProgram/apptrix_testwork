@@ -19,7 +19,7 @@ https://en.wikipedia.org/wiki/Great-circle_distance](https://github.com/RussianP
 # http://russianprogram.pythonanywhere.com/api/clients/
 
 # HOW TO:
-## Как запустить
+## Как запустить на Локалке
 ### Клонируем
 ```
 git clone https://github.com/RussianProgram/apptrix_testwork.git
