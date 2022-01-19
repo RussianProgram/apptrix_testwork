@@ -1,6 +1,7 @@
 # Тестовое задание для Apptrix
 
-##Задачи:
+## Задачи:
+
 1) [Создать модель участников. У участника должна быть аватарка, пол, имя и фамилия, почта.](https://github.com/RussianProgram/apptrix_testwork/commit/cab0d874f36d0768b35b72129ebbda05cb3dda0f)
 
 2) [Создать эндпоинт регистрации нового участника: /api/clients/create (не забываем о пароле и совместимости с авторизацией модели участника)](https://github.com/RussianProgram/apptrix_testwork/commit/fdda6d0938653bfd76836bb2d00e00a1219fa7d3)
@@ -17,24 +18,24 @@ https://en.wikipedia.org/wiki/Great-circle_distance](https://github.com/RussianP
 7) [Задеплоить проект на любом удобном для вас хостинге, сервисах PaaS (Heroku) и т.п. Должна быть возможность просмотреть реализацию всех задач. Если есть какие-то особенности по тестированию, написать в Readme. Там же оставить ссылку/ссылки на АПИ проекта]()
 
 
-#API DOCUMENTATION:
-###CLIENTS LIST (GET)
+# API DOCUMENTATION:
+### CLIENTS LIST (GET)
 ```shell
 curl --location --request GET http://localhost:8000/api/clients/
 ```
-###CREATE CLIENT (POST)
+### CREATE CLIENT (POST)
 ```shell
 curl --data "username=somename&password=somepass&password2=somepass&email=email&first_name=name&last_name=name" http://localhost:8000/api/clients/
 ```
-###CLIENT DETAIL (GET)
+### CLIENT DETAIL (GET)
 ```shell
 curl --location --request GET http://localhost:8000/api/clients/{client_id}/
 ```
-###CLIENT UPDATE (PUT)
+### CLIENT UPDATE (PUT)
 ```shell
 curl --data "{"sex":"F""}" http://localhost:8000/api/clients/{client_id}/
 ```
-###CLIENT MATCH (GET)
+### CLIENT MATCH (GET)
 ```shell
 curl --location --request GET http://localhost:8000/api/clients/{client_id}/match/
 ```
