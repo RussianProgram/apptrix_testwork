@@ -37,6 +37,11 @@ python manage.py createsuperuser
 ```shell
 curl --location --request GET http://localhost:8000/api/clients/
 ```
+### CLIENTS LIST WITH FILTERS (GET)
+#### Отоброзить пользователей женского пола в радиусе 500 метров(вычисляется на основании долготы и широты)
+```shell
+curl --location --request GET http://localhost:8000/api/clients/?sex="F"&distance=500
+```
 ### CREATE CLIENT (POST)
 ```shell
 curl --data "username=somename&password=somepass&password2=somepass&email=email&first_name=name&last_name=name" http://localhost:8000/api/clients/
